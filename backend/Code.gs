@@ -13,7 +13,7 @@
 // ============================================
 // 설정
 // ============================================
-const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE'; // 실제 시트 ID로 변경
+const SPREADSHEET_ID = '1zBKigqguAdUGwyL-gnC8BRDQq-Hs1b6cR3XYtIiNcDA';
 
 // 시트 이름
 const SHEETS = {
@@ -644,4 +644,208 @@ function testGetLawList() {
 function testSearch() {
   const result = searchLaws({ keyword: '학칙', searchType: 'all' });
   console.log(JSON.stringify(result, null, 2));
+}
+
+// ============================================
+// 초기 데이터 입력 함수
+// Apps Script 에디터에서 initializeData 실행
+// ============================================
+
+/**
+ * 샘플 데이터 초기화 - 메뉴에서 실행
+ */
+function initializeData() {
+  const ui = SpreadsheetApp.getUi();
+  const response = ui.alert(
+    '데이터 초기화',
+    '샘플 데이터를 입력하시겠습니까?\n기존 데이터가 있으면 덮어씁니다.',
+    ui.ButtonSet.YES_NO
+  );
+
+  if (response === ui.Button.YES) {
+    initializeLaws();
+    initializeVersions();
+    initializeArticles();
+    initializeDepartments();
+    initializeConfig();
+    ui.alert('완료', '샘플 데이터가 입력되었습니다.', ui.ButtonSet.OK);
+  }
+}
+
+/**
+ * 스프레드시트 열 때 메뉴 추가
+ */
+function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('규정관리시스템')
+    .addItem('샘플 데이터 입력', 'initializeData')
+    .addItem('데이터 초기화 (삭제)', 'clearAllData')
+    .addSeparator()
+    .addItem('API 테스트', 'testGetLawList')
+    .addToUi();
+}
+
+/**
+ * laws 시트 초기화
+ */
+function initializeLaws() {
+  const sheet = getSpreadsheet().getSheetByName(SHEETS.LAWS);
+  const data = [
+    [1, '학칙', '규정', 'D001', '교무처', 1, '시행', '2020-03-01', '2024-03-01'],
+    [2, '교원인사규정', '규정', 'D001', '교무처', 1, '시행', '2021-01-01', '2024-01-15'],
+    [3, '학생회칙', '규정', 'D002', '학생처', 1, '시행', '2022-03-01', '2023-09-01'],
+    [4, '장학금지급규정', '규정', 'D002', '학생처', 1, '시행', '2022-03-01', '2024-02-20'],
+    [5, '연구비관리지침', '지침', 'D003', '기획처', 1, '시행', '2023-01-01', '2024-01-10'],
+    [6, '출장여비지급지침', '지침', 'D004', '사무처', 1, '시행', '2023-06-01', '2023-06-01'],
+    [7, '정보보안관리지침', '지침', 'D005', '정보전산원', 1, '시행', '2023-08-01', '2023-08-01']
+  ];
+
+  // 기존 데이터 삭제 (헤더 제외)
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+  }
+
+  // 새 데이터 입력
+  if (data.length > 0) {
+    sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+  }
+}
+
+/**
+ * versions 시트 초기화
+ */
+function initializeVersions() {
+  const sheet = getSpreadsheet().getSheetByName(SHEETS.VERSIONS);
+  const data = [
+    [1, 1, 1, '제정', '2020-03-01', '2020-03-01', '최초 제정', true],
+    [2, 2, 1, '제정', '2021-01-01', '2021-01-01', '최초 제정', true],
+    [3, 3, 1, '제정', '2022-03-01', '2022-03-01', '최초 제정', true],
+    [4, 4, 1, '제정', '2022-03-01', '2022-03-01', '최초 제정', true],
+    [5, 5, 1, '제정', '2023-01-01', '2023-01-01', '최초 제정', true],
+    [6, 6, 1, '제정', '2023-06-01', '2023-06-01', '최초 제정', true],
+    [7, 7, 1, '제정', '2023-08-01', '2023-08-01', '최초 제정', true]
+  ];
+
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+  }
+
+  if (data.length > 0) {
+    sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+  }
+}
+
+/**
+ * articles 시트 초기화
+ */
+function initializeArticles() {
+  const sheet = getSpreadsheet().getSheetByName(SHEETS.ARTICLES);
+  const data = [
+    // 학칙 (VERSION_SEQ: 1)
+    [1, 1, '제1장 총칙', '제1조', '목적', '이 학칙은 본 대학교의 학사운영에 관한 기본적인 사항을 규정함을 목적으로 한다.', '', 1],
+    [2, 1, '제1장 총칙', '제2조', '명칭', '본 대학교는 "OO대학교"라 칭한다.', '', 2],
+    [3, 1, '제1장 총칙', '제3조', '위치', '본 대학교는 경기도 OO시에 둔다.', '', 3],
+    [4, 1, '제2장 학기 및 수업', '제4조', '학년도', '학년도는 3월 1일부터 다음 해 2월 말일까지로 한다.', '', 4],
+    [5, 1, '제2장 학기 및 수업', '제5조', '학기', '① 학기는 2학기제로 한다.\n② 제1학기는 3월 1일부터 8월 31일까지, 제2학기는 9월 1일부터 다음 해 2월 말일까지로 한다.', '', 5],
+    [6, 1, '제2장 학기 및 수업', '제6조', '수업일수', '각 학기의 수업일수는 15주 이상으로 한다.', '', 6],
+    [7, 1, '제3장 입학', '제7조', '입학시기', '입학시기는 학년 초로 한다.', '', 7],
+    [8, 1, '제3장 입학', '제8조', '입학자격', '본 대학교에 입학할 수 있는 자는 고등학교를 졸업한 자 또는 법령에 의하여 이와 동등 이상의 학력이 있다고 인정된 자로 한다.', '', 8],
+    [9, 1, '', '부칙', '', '(시행일) 이 학칙은 2020년 3월 1일부터 시행한다.', '', 100],
+
+    // 교원인사규정 (VERSION_SEQ: 2)
+    [10, 2, '', '제1조', '목적', '이 규정은 교원의 임용, 승진, 보수 등 인사에 관한 사항을 규정함을 목적으로 한다.', '', 1],
+    [11, 2, '', '제2조', '적용범위', '이 규정은 본 대학교 전임교원에게 적용한다.', '', 2],
+    [12, 2, '', '제3조', '교원의 구분', '교원은 교수, 부교수, 조교수, 전임강사로 구분한다.', '', 3],
+    [13, 2, '', '부칙', '', '이 규정은 2021년 1월 1일부터 시행한다.', '', 100],
+
+    // 연구비관리지침 (VERSION_SEQ: 5)
+    [14, 5, '', '제1조', '목적', '이 지침은 연구비의 효율적인 관리를 위하여 필요한 사항을 규정함을 목적으로 한다.', '', 1],
+    [15, 5, '', '제2조', '적용범위', '이 지침은 본 대학교에서 수행하는 모든 연구과제에 적용한다.', '', 2],
+    [16, 5, '', '제3조', '연구비의 집행', '연구비는 승인된 연구계획서에 따라 집행하여야 한다.', '', 3],
+    [17, 5, '', '부칙', '', '이 지침은 2023년 1월 1일부터 시행한다.', '', 100]
+  ];
+
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+  }
+
+  if (data.length > 0) {
+    sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+  }
+}
+
+/**
+ * departments 시트 초기화
+ */
+function initializeDepartments() {
+  const sheet = getSpreadsheet().getSheetByName(SHEETS.DEPARTMENTS);
+  const data = [
+    // 규정 카테고리
+    ['D001', '교무처', '', '규정', 1, true],
+    ['D002', '학생처', '', '규정', 2, true],
+    ['D003', '기획처', '', '규정', 3, true],
+    ['D004', '사무처', '', '규정', 4, true],
+    ['D005', '정보전산원', '', '규정', 5, true],
+    ['D006', '산학협력단', '', '규정', 6, true],
+    // 지침 카테고리
+    ['D001', '교무처', '', '지침', 1, true],
+    ['D002', '학생처', '', '지침', 2, true],
+    ['D003', '기획처', '', '지침', 3, true],
+    ['D004', '사무처', '', '지침', 4, true],
+    ['D005', '정보전산원', '', '지침', 5, true],
+    ['D006', '산학협력단', '', '지침', 6, true]
+  ];
+
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+  }
+
+  if (data.length > 0) {
+    sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+  }
+}
+
+/**
+ * config 시트 초기화
+ */
+function initializeConfig() {
+  const sheet = getSpreadsheet().getSheetByName(SHEETS.CONFIG);
+  const data = [
+    ['SITE_TITLE', '규정관리시스템', '사이트 제목'],
+    ['UNIVERSITY_NAME', 'OO대학교', '대학명'],
+    ['ADMIN_EMAIL', 'admin@university.ac.kr', '관리자 이메일']
+  ];
+
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+  }
+
+  if (data.length > 0) {
+    sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+  }
+}
+
+/**
+ * 모든 데이터 삭제 (헤더 제외)
+ */
+function clearAllData() {
+  const ui = SpreadsheetApp.getUi();
+  const response = ui.alert(
+    '데이터 삭제',
+    '모든 데이터를 삭제하시겠습니까?\n(컬럼 헤더는 유지됩니다)',
+    ui.ButtonSet.YES_NO
+  );
+
+  if (response === ui.Button.YES) {
+    const sheetNames = [SHEETS.LAWS, SHEETS.VERSIONS, SHEETS.ARTICLES, SHEETS.DEPARTMENTS, SHEETS.ATTACHMENTS, SHEETS.CONFIG];
+
+    sheetNames.forEach(name => {
+      const sheet = getSpreadsheet().getSheetByName(name);
+      if (sheet && sheet.getLastRow() > 1) {
+        sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+      }
+    });
+
+    ui.alert('완료', '모든 데이터가 삭제되었습니다.', ui.ButtonSet.OK);
+  }
 }
