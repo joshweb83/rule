@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>규정관리시스템</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+/* ============================================
+   규정관리시스템 - 스타일시트
+   ============================================ */
+:root {
+  --primary-color: #1a5276;
+  --primary-light: #2980b9;
+  --primary-dark: #154360;
+  --accent-color: #f39c12;
+  --accent-light: #f5b041;
+  --success-color: #27ae60;
+  --warning-color: #e74c3c;
+  --text-color: #333;
+  --text-light: #666;
+  --text-muted: #999;
+  --bg-color: #f5f6fa;
+  --bg-white: #fff;
+  --border-color: #ddd;
+  --border-light: #eee;
+  --sidebar-width: 280px;
+  --header-height: 50px;
+  --search-height: 60px;
+  --footer-height: 80px;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --radius: 4px;
+  --transition: all 0.2s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: var(--primary-color); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--primary-light); }
+
+/* 헤더 */
+.header {
+  height: var(--header-height);
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+}
+
+.logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: bold; }
+.logo i { font-size: 24px; }
+.logo-divider { color: rgba(255, 255, 255, 0.5); margin: 0 5px; }
+.system-name { font-weight: normal; }
+.header-right { display: flex; gap: 20px; }
+.header-link { color: white; font-size: 13px; }
+.header-link:hover { color: var(--accent-light); }
+
+/* 검색 영역 */
+.search-container {
+  height: var(--search-height);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.search-box { display: flex; align-items: center; gap: 10px; }
+
+.search-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 14px;
+  background: white;
+}
+
+.search-input {
+  width: 400px;
+  padding: 8px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+}
+
+.search-buttons { display: flex; gap: 10px; }
+
+/* 버튼 */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-search { background: var(--primary-color); color: white; }
+.btn-search:hover { background: var(--primary-dark); }
+.btn-outline { background: white; border: 1px solid var(--border-color); color: var(--text-color); }
+.btn-outline:hover { background: var(--bg-color); border-color: var(--primary-light); }
+.btn-action { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); font-size: 12px; padding: 6px 12px; }
+.btn-action:hover { background: var(--border-light); }
+.btn-icon { background: none; border: 1px solid var(--border-color); border-radius: var(--radius); padding: 6px 10px; cursor: pointer; color: var(--text-light); }
+.btn-icon:hover { background: var(--bg-color); color: var(--primary-color); }
+
+/* 메인 컨테이너 */
+.main-container {
+  flex: 1;
+  display: flex;
+  min-height: calc(100vh - var(--header-height) - var(--search-height) - var(--footer-height));
+}
+
+/* 사이드바 */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--bg-white);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-nav { display: flex; flex-direction: column; border-bottom: 1px solid var(--border-color); background: #f8f9fa; }
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 10px;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-light);
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-item i { font-size: 20px; margin-bottom: 5px; }
+.nav-item:hover { background: var(--bg-color); color: var(--primary-color); }
+.nav-item.active { background: var(--primary-color); color: white; }
+
+/* 부서 트리 */
+.dept-tree-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.dept-tree-header {
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.tree-controls { display: flex; gap: 5px; }
+
+.dept-tree-search { padding: 10px; border-bottom: 1px solid var(--border-color); }
+.dept-tree-search input { width: 100%; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: var(--radius); font-size: 13px; }
+
+.dept-tree { flex: 1; overflow-y: auto; padding: 10px; }
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: var(--radius);
+}
+
+.tree-item:hover { background: var(--bg-color); }
+.tree-item.selected { background: #e8f4fc; color: var(--primary-color); }
+.tree-toggle { width: 20px; text-align: center; color: var(--text-muted); }
+.tree-icon { margin-right: 8px; color: var(--accent-color); }
+.tree-label { flex: 1; font-size: 13px; }
+.tree-children { margin-left: 20px; display: none; }
+.tree-children.expanded { display: block; }
+
+/* 메인 컨텐츠 */
+.content { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-color); }
+
+.breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light); margin-bottom: 15px; }
+.breadcrumb a { color: var(--text-light); }
+.breadcrumb a:hover { color: var(--primary-color); }
+.breadcrumb i { font-size: 10px; color: var(--text-muted); }
+
+.content-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.result-count { color: var(--text-light); font-size: 13px; }
+.sort-options select { padding: 5px 10px; border: 1px solid var(--border-color); border-radius: var(--radius); font-size: 13px; }
+
+/* 규정 목록 */
+.law-list { list-style: none; background: var(--bg-white); border: 1px solid var(--border-color); border-radius: var(--radius); }
+
+.law-item { padding: 15px 20px; border-bottom: 1px solid var(--border-light); cursor: pointer; transition: var(--transition); }
+.law-item:last-child { border-bottom: none; }
+.law-item:hover { background: #f8f9fa; }
+.law-item-title { font-size: 15px; font-weight: 500; color: var(--text-color); margin-bottom: 5px; }
+.law-item-meta { display: flex; gap: 15px; font-size: 12px; color: var(--text-light); }
+.law-item-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: var(--bg-color); }
+.law-item-badge.type-regulation { background: #e8f4fc; color: var(--primary-color); }
+.law-item-badge.type-guideline { background: #fef5e7; color: #d68910; }
+
+/* 규정 상세 */
+.detail-header { background: var(--bg-white); padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius); margin-bottom: 15px; }
+.detail-title { font-size: 22px; font-weight: bold; color: var(--text-color); margin-bottom: 10px; }
+.detail-meta { display: flex; gap: 20px; color: var(--text-light); font-size: 13px; }
+.meta-item i { margin-right: 5px; color: var(--primary-light); }
+
+.detail-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-white);
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.version-selector { display: flex; align-items: center; gap: 10px; }
+.version-selector select { padding: 6px 12px; border: 1px solid var(--border-color); border-radius: var(--radius); font-size: 13px; min-width: 200px; }
+.action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.revision-badge { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radius); padding: 8px 15px; margin-bottom: 15px; font-size: 13px; color: #856404; }
+
+/* 2단 레이아웃 */
+.detail-content {
+  display: flex;
+  gap: 15px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.toc-panel { width: 300px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; }
+.article-tree { flex: 1; overflow-y: auto; padding: 15px; }
+
+.toc-item { padding: 6px 10px; cursor: pointer; border-radius: var(--radius); font-size: 13px; display: flex; align-items: center; }
+.toc-item:hover { background: var(--bg-color); }
+.toc-item.active { background: #e8f4fc; color: var(--primary-color); font-weight: 500; }
+.toc-item.chapter { font-weight: bold; color: var(--text-color); margin-top: 10px; padding-left: 5px; }
+.toc-item .change-badge { margin-left: auto; padding: 1px 6px; border-radius: 8px; font-size: 10px; background: #fff3cd; color: #856404; }
+.toc-item .change-badge.new { background: #d4edda; color: #155724; }
+
+.toc-footer { border-top: 1px solid var(--border-color); padding: 15px; background: #f8f9fa; }
+.toc-section { margin-bottom: 10px; }
+.toc-section:last-child { margin-bottom: 0; }
+.toc-section label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+
+.attachment-list { margin-top: 8px; }
+.attachment-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12px; color: var(--primary-color); cursor: pointer; }
+.attachment-item:hover { text-decoration: underline; }
+.attachment-item i { color: var(--text-muted); }
+
+.article-panel { flex: 1; overflow-y: auto; padding: 20px; }
+.article-content { line-height: 1.8; }
+.article-section { margin-bottom: 25px; }
+
+.article-title { font-size: 16px; font-weight: bold; color: var(--text-color); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border-light); }
+.article-title.highlight { background: #fff3cd; padding: 8px 10px; border-radius: var(--radius); border-bottom: none; }
+.article-title .badge { font-size: 11px; padding: 2px 8px; border-radius: 8px; margin-left: 10px; font-weight: normal; }
+.article-title .badge.new { background: #d4edda; color: #155724; }
+.article-title .badge.modified { background: #fff3cd; color: #856404; }
+.article-body { color: var(--text-color); white-space: pre-wrap; }
+
+.detail-content.full-view .toc-panel { display: none; }
+.detail-content.full-view .article-panel { max-width: 900px; margin: 0 auto; }
+
+/* 검색 결과 */
+.search-result-info { background: #e8f4fc; padding: 12px 15px; border-radius: var(--radius); margin-bottom: 15px; color: var(--primary-color); }
+.match-text { font-size: 12px; color: var(--text-light); margin-top: 5px; padding: 8px; background: #f8f9fa; border-radius: var(--radius); }
+.match-text mark { background: #fff3cd; padding: 0 2px; }
+
+/* 푸터 */
+.footer { height: var(--footer-height); background: #3d3d3d; color: #aaa; display: flex; align-items: center; justify-content: center; text-align: center; }
+.footer-content p { font-size: 12px; margin: 3px 0; }
+
+/* 모달 */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.modal-content { background: white; border-radius: var(--radius); width: 90%; max-width: 600px; max-height: 80vh; overflow: hidden; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); background: #f8f9fa; }
+.modal-header h3 { font-size: 16px; }
+.modal-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-light); }
+.modal-close:hover { color: var(--text-color); }
+.modal-body { padding: 20px; overflow-y: auto; max-height: calc(80vh - 60px); }
+
+.revision-table { width: 100%; border-collapse: collapse; }
+.revision-table th, .revision-table td { padding: 10px; border: 1px solid var(--border-color); text-align: left; font-size: 13px; }
+.revision-table th { background: #f8f9fa; font-weight: bold; }
+
+/* 유틸리티 */
+.hidden { display: none !important; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-light); }
+.empty-state i { font-size: 50px; margin-bottom: 15px; color: var(--border-color); }
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .search-input { width: 250px; }
+  .sidebar { width: 240px; }
+  .toc-panel { width: 250px; }
+}
+
+@media (max-width: 768px) {
+  .search-container { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
+  .search-box { width: 100%; }
+  .search-input { flex: 1; width: auto; }
+  .sidebar { display: none; }
+  .detail-content { flex-direction: column; }
+  .toc-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); max-height: 300px; }
+}
+
+@media print {
+  .header, .search-container, .sidebar, .detail-toolbar, .toc-panel, .footer { display: none !important; }
+  .main-container { display: block; }
+  .content { padding: 0; }
+  .detail-content { border: none; }
+  .article-panel { padding: 0; }
+}
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <i class="fas fa-university"></i>
+        <span class="logo-text">대학교</span>
+        <span class="logo-divider">|</span>
+        <span class="system-name">규정관리시스템</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="#" class="header-link">HOME</a>
+      <a href="#" class="header-link">관리자</a>
+      <a href="#" class="header-link">대학홈</a>
+    </div>
+  </header>
+
+  <!-- 검색 영역 -->
+  <div class="search-container">
+    <div class="search-box">
+      <select id="searchType" class="search-select">
+        <option value="all">전체</option>
+        <option value="title">제목</option>
+        <option value="content">내용</option>
+      </select>
+      <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요" onkeypress="if(event.key==='Enter')doSearch()">
+      <button class="btn btn-search" onclick="doSearch()">
+        <i class="fas fa-search"></i> 검색
+      </button>
+    </div>
+    <div class="search-buttons">
+      <button class="btn btn-outline" onclick="showKoreanIndex()">
+        <i class="fas fa-font"></i> 가나다검색
+      </button>
+      <button class="btn btn-outline" onclick="showDateSearch()">
+        <i class="fas fa-calendar"></i> 개정일검색
+      </button>
+    </div>
+  </div>
+
+  <!-- 메인 컨테이너 -->
+  <div class="main-container">
+    <!-- 좌측 사이드바 -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-category="규정" onclick="changeCategory('규정')">
+          <i class="fas fa-book"></i><span>규정</span>
+        </a>
+        <a href="#" class="nav-item" data-category="지침" onclick="changeCategory('지침')">
+          <i class="fas fa-file-alt"></i><span>지침</span>
+        </a>
+        <a href="#" class="nav-item" data-category="최신" onclick="showLatestRevisions()">
+          <i class="fas fa-clock"></i><span>최신<br>제/개정</span>
+        </a>
+        <a href="#" class="nav-item" data-category="서식" onclick="changeCategory('서식')">
+          <i class="fas fa-file-invoice"></i><span>서식</span>
+        </a>
+      </nav>
+
+      <div class="dept-tree-container">
+        <div class="dept-tree-header">
+          <span id="currentCategoryTitle">규정정보</span>
+          <div class="tree-controls">
+            <button class="btn-icon" onclick="expandAllTree()" title="전체 펼치기"><i class="fas fa-plus-square"></i></button>
+            <button class="btn-icon" onclick="collapseAllTree()" title="전체 접기"><i class="fas fa-minus-square"></i></button>
+          </div>
+        </div>
+        <div class="dept-tree-search">
+          <input type="text" id="treeSearch" placeholder="분야별 검색" onkeyup="filterTree()">
+        </div>
+        <div id="deptTree" class="dept-tree"></div>
+      </div>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="content">
+      <div class="breadcrumb" id="breadcrumb">
+        <a href="#" onclick="goHome()">HOME</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>규정정보</span>
+      </div>
+
+      <div id="contentArea">
+        <!-- 규정 목록 -->
+        <div id="lawListView" class="view-container">
+          <h2 class="content-title">규정 목록</h2>
+          <div class="list-header">
+            <span class="result-count">총 <strong id="totalCount">0</strong>건</span>
+            <select id="sortOption" onchange="sortLawList()">
+              <option value="latest">최신순</option>
+              <option value="title">제목순</option>
+            </select>
+          </div>
+          <ul id="lawList" class="law-list"></ul>
+        </div>
+
+        <!-- 규정 상세 -->
+        <div id="lawDetailView" class="view-container" style="display: none;">
+          <div class="detail-header">
+            <h2 id="lawTitle" class="detail-title">규정 제목</h2>
+            <div class="detail-meta">
+              <span class="meta-item"><i class="fas fa-building"></i> 담당부서: <strong id="lawDeptName">-</strong></span>
+            </div>
+          </div>
+
+          <div class="detail-toolbar">
+            <div class="version-selector">
+              <select id="versionSelect" onchange="changeVersion()"></select>
+              <button class="btn-icon" onclick="prevArticle()" title="이전"><i class="fas fa-chevron-left"></i></button>
+              <button class="btn-icon" onclick="nextArticle()" title="다음"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-action" onclick="downloadFullText()"><i class="fas fa-download"></i> 전문다운</button>
+              <button class="btn btn-action" onclick="showRevisionHistory()"><i class="fas fa-history"></i> 개정정보</button>
+              <button class="btn btn-action" onclick="toggleViewMode('split')"><i class="fas fa-columns"></i> 2단보기</button>
+              <button class="btn btn-action" onclick="toggleViewMode('full')"><i class="fas fa-expand"></i> 전체보기</button>
+              <button class="btn btn-action" onclick="window.print()"><i class="fas fa-print"></i> 인쇄</button>
+            </div>
+          </div>
+
+          <div id="revisionBadge" class="revision-badge" style="display: none;">
+            <i class="fas fa-info-circle"></i> 개정내역 (<span id="revisionCount">0</span>)
+          </div>
+
+          <div class="detail-content" id="detailContent">
+            <div class="toc-panel" id="tocPanel">
+              <div id="articleTree" class="article-tree"></div>
+              <div class="toc-footer">
+                <div class="toc-section"><strong>별표서식</strong>
+                  <div id="attachmentList" class="attachment-list"></div>
+                </div>
+              </div>
+            </div>
+            <div class="article-panel" id="articlePanel">
+              <div id="articleContent" class="article-content"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 검색 결과 -->
+        <div id="searchResultView" class="view-container" style="display: none;">
+          <h2 class="content-title">검색 결과</h2>
+          <div class="search-result-info">"<span id="searchKeywordDisplay"></span>" 검색 결과: <strong id="searchResultCount">0</strong>건</div>
+          <ul id="searchResultList" class="law-list"></ul>
+        </div>
+
+        <!-- 최신 제/개정 -->
+        <div id="latestRevisionView" class="view-container" style="display: none;">
+          <h2 class="content-title">최신 제/개정</h2>
+          <ul id="latestRevisionList" class="law-list"></ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>본교 : (우00000) 경기도 OO시 OO로 00 / Tel : 000-000-0000</p>
+      <p>COPYRIGHT © 2024 University. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 모달 -->
+  <div id="modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">모달 제목</h3>
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+<script>
+// ============================================
+// 설정
+// ============================================
+const CONFIG = {
+  // Google Apps Script 웹 앱 URL (배포 후 변경)
+  API_URL: 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL',
+  // 데모 모드 (true: 샘플 데이터 사용, false: API 연동)
+  DEMO_MODE: true,
+  LAW_TYPES: {
+    '규정': { label: '규정', class: 'type-regulation' },
+    '지침': { label: '지침', class: 'type-guideline' },
+    '세칙': { label: '세칙', class: 'type-detail' },
+    '내규': { label: '내규', class: 'type-internal' }
+  },
+  CHANGE_TYPES: {
+    '신규': { label: '신규', class: 'new' },
+    '변경': { label: '변경', class: 'modified' }
+  }
+};
+
+// ============================================
+// 데모 데이터
+// ============================================
+const DEMO_DATA = {
+  laws: [
+    { seq: 1, title: '학칙', type: '규정', deptCode: 'D001', deptName: '교무처', currentVersion: 5, status: '시행', updatedDate: '2024-03-01' },
+    { seq: 2, title: '교원인사규정', type: '규정', deptCode: 'D001', deptName: '교무처', currentVersion: 3, status: '시행', updatedDate: '2024-01-15' },
+    { seq: 3, title: '학생회칙', type: '규정', deptCode: 'D003', deptName: '학생처', currentVersion: 2, status: '시행', updatedDate: '2023-09-01' },
+    { seq: 4, title: '장학금지급규정', type: '규정', deptCode: 'D003', deptName: '학생처', currentVersion: 4, status: '시행', updatedDate: '2024-02-20' },
+    { seq: 5, title: '연구비관리지침', type: '지침', deptCode: 'D002', deptName: '기획처', currentVersion: 2, status: '시행', updatedDate: '2024-01-10' },
+    { seq: 6, title: '출장여비지급지침', type: '지침', deptCode: 'D004', deptName: '사무처', currentVersion: 1, status: '시행', updatedDate: '2023-06-01' },
+    { seq: 7, title: 'RISE 사업비 관리 운영 지침', type: '지침', deptCode: 'D010', deptName: 'RISE사업단', currentVersion: 1, status: '시행', updatedDate: '2025-10-20' },
+    { seq: 8, title: '정보보안관리지침', type: '지침', deptCode: 'D005', deptName: '정보전산원', currentVersion: 1, status: '시행', updatedDate: '2023-08-01' }
+  ],
+  versions: [
+    { seq: 1, lawSeq: 1, version: 5, revisionType: '개정', revisionDate: '2024-03-01', effectiveDate: '2024-03-01', isCurrent: true },
+    { seq: 2, lawSeq: 1, version: 4, revisionType: '개정', revisionDate: '2023-03-01', effectiveDate: '2023-03-01', isCurrent: false },
+    { seq: 3, lawSeq: 2, version: 3, revisionType: '개정', revisionDate: '2024-01-15', effectiveDate: '2024-02-01', isCurrent: true },
+    { seq: 4, lawSeq: 3, version: 2, revisionType: '개정', revisionDate: '2023-09-01', effectiveDate: '2023-09-01', isCurrent: true },
+    { seq: 5, lawSeq: 4, version: 4, revisionType: '개정', revisionDate: '2024-02-20', effectiveDate: '2024-03-01', isCurrent: true },
+    { seq: 6, lawSeq: 5, version: 2, revisionType: '개정', revisionDate: '2024-01-10', effectiveDate: '2024-02-01', isCurrent: true },
+    { seq: 7, lawSeq: 6, version: 1, revisionType: '제정', revisionDate: '2023-06-01', effectiveDate: '2023-06-01', isCurrent: true },
+    { seq: 8, lawSeq: 7, version: 1, revisionType: '제정', revisionDate: '2025-10-20', effectiveDate: '2025-10-20', isCurrent: true },
+    { seq: 9, lawSeq: 8, version: 1, revisionType: '제정', revisionDate: '2023-08-01', effectiveDate: '2023-09-01', isCurrent: true }
+  ],
+  articles: [
+    // 학칙
+    { seq: 1, versionSeq: 1, chapter: '제1장 총칙', articleNo: '제1조', articleTitle: '목적', content: '이 학칙은 본 대학교의 학사운영에 관한 기본적인 사항을 규정함을 목적으로 한다.', changeType: '', sortOrder: 1 },
+    { seq: 2, versionSeq: 1, chapter: '제1장 총칙', articleNo: '제2조', articleTitle: '명칭', content: '본 대학교는 "OO대학교"라 칭한다.', changeType: '', sortOrder: 2 },
+    { seq: 3, versionSeq: 1, chapter: '제1장 총칙', articleNo: '제3조', articleTitle: '위치', content: '본 대학교는 경기도 OO시에 둔다.', changeType: '신규', sortOrder: 3 },
+    { seq: 4, versionSeq: 1, chapter: '제2장 학기', articleNo: '제4조', articleTitle: '학년도', content: '학년도는 3월 1일부터 다음 해 2월 말일까지로 한다.', changeType: '', sortOrder: 4 },
+    { seq: 5, versionSeq: 1, chapter: '제2장 학기', articleNo: '제5조', articleTitle: '학기', content: '① 학기는 2학기제로 한다.\n② 제1학기는 3월 1일부터 8월 31일까지, 제2학기는 9월 1일부터 다음 해 2월 말일까지로 한다.', changeType: '', sortOrder: 5 },
+    { seq: 6, versionSeq: 1, chapter: '', articleNo: '부칙', articleTitle: '', content: '(시행일) 이 학칙은 2024년 3월 1일부터 시행한다.', changeType: '', sortOrder: 100 },
+    // RISE 지침
+    { seq: 10, versionSeq: 8, chapter: '', articleNo: '제1조', articleTitle: '목적', content: '이 지침은 RISE사업의 효율적인 사업비 관리를 위하여 필요한 사항을 규정함을 목적으로 한다.', changeType: '', sortOrder: 1 },
+    { seq: 11, versionSeq: 8, chapter: '', articleNo: '제2조', articleTitle: '적용범위', content: '이 지침은 RISE사업에서 지원받는 모든 사업비에 적용한다.', changeType: '', sortOrder: 2 },
+    { seq: 12, versionSeq: 8, chapter: '제2장 사업비 관리', articleNo: '제4조', articleTitle: '회계연도', content: '사업비의 회계연도는 정부의 회계연도에 따른다.', changeType: '', sortOrder: 3 },
+    { seq: 13, versionSeq: 8, chapter: '제2장 사업비 관리', articleNo: '제5조', articleTitle: '사업비 관리', content: '① 사업비는 별도의 계정으로 관리한다.\n② 사업단장은 사업비 관리에 관한 총괄 책임을 진다.', changeType: '', sortOrder: 4 },
+    { seq: 14, versionSeq: 8, chapter: '제2장 사업비 관리', articleNo: '제12조의2', articleTitle: '성과급 및 사업관리운영수당', content: '① 사업의 성공적 추진과 효과적 관리를 위해 내부 교직원을 대상으로 성과급 및 사업관리운영수당을 지급할 수 있다.\n② 성과급 및 사업관리 운영수당은 사업비 총액의 5% 범위내에서 지급 할 수 있으며, 지급대상의 범위 및 지급액 등 구체적인 사항은 총장이 따로 정한다.', changeType: '신규', sortOrder: 5 },
+    { seq: 15, versionSeq: 8, chapter: '제4장 사업 결과 보고', articleNo: '제13조', articleTitle: '결과보고', content: '사업 실행부서장은 단위과제 종료 후 사업단장이 정한 기한 및 방법에 따라 사업별 결과보고서를 작성하여 사업단장에게 제출하여야 한다.', changeType: '신규', sortOrder: 6 },
+    { seq: 16, versionSeq: 8, chapter: '', articleNo: '부칙', articleTitle: '', content: '(시행일) 이 지침은 2025년 10월 20일부터 시행한다.', changeType: '', sortOrder: 100 }
+  ],
+  departments: [
+    { code: 'D001', name: '교무처', parentCode: '', category: '규정', sortOrder: 1 },
+    { code: 'D002', name: '기획처', parentCode: '', category: '규정', sortOrder: 2 },
+    { code: 'D003', name: '학생처', parentCode: '', category: '규정', sortOrder: 3 },
+    { code: 'D004', name: '사무처', parentCode: '', category: '규정', sortOrder: 4 },
+    { code: 'D005', name: '정보전산원', parentCode: '', category: '규정', sortOrder: 5 },
+    { code: 'D001', name: '교무처', parentCode: '', category: '지침', sortOrder: 1 },
+    { code: 'D002', name: '기획처', parentCode: '', category: '지침', sortOrder: 2 },
+    { code: 'D004', name: '사무처', parentCode: '', category: '지침', sortOrder: 3 },
+    { code: 'D005', name: '정보전산원', parentCode: '', category: '지침', sortOrder: 4 },
+    { code: 'D010', name: 'RISE사업단', parentCode: '', category: '지침', sortOrder: 10 }
+  ],
+  attachments: [
+    { seq: 1, versionSeq: 8, fileName: '[별표] RISE사업 사업비 집행 기준.hwp', fileUrl: '#', fileType: '별표' }
+  ]
+};
+
+// ============================================
+// 상태
+// ============================================
+const state = {
+  currentCategory: '규정',
+  currentDeptCode: null,
+  currentLawSeq: null,
+  currentArticleIndex: 0,
+  viewMode: 'split',
+  laws: [],
+  lawDetail: null
+};
+
+// ============================================
+// 초기화
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadDepartmentTree();
+  loadLawList();
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+});
+
+// ============================================
+// API
+// ============================================
+async function apiGet(action, params = {}) {
+  if (CONFIG.DEMO_MODE) return getDemoData(action, params);
+  const url = new URL(CONFIG.API_URL);
+  url.searchParams.append('action', action);
+  Object.entries(params).forEach(([k, v]) => v != null && url.searchParams.append(k, v));
+  const res = await fetch(url);
+  return res.json();
+}
+
+function getDemoData(action, params) {
+  switch (action) {
+    case 'getLawList': return getDemoLawList(params);
+    case 'getLawDetail': return getDemoLawDetail(params.seq);
+    case 'getDepartments': return getDemoDepartments(params.category);
+    case 'search': return getDemoSearch(params.keyword);
+    case 'getLatestRevisions': return getDemoLatestRevisions();
+    default: return { success: false };
+  }
+}
+
+function getDemoLawList(params) {
+  let laws = DEMO_DATA.laws.filter(l => l.status === '시행');
+  if (params.type) laws = laws.filter(l => l.type === params.type);
+  if (params.deptCode) laws = laws.filter(l => l.deptCode === params.deptCode);
+  return { success: true, data: laws, total: laws.length };
+}
+
+function getDemoLawDetail(seq) {
+  const law = DEMO_DATA.laws.find(l => l.seq == seq);
+  if (!law) return { success: false };
+  const versions = DEMO_DATA.versions.filter(v => v.lawSeq == seq);
+  const currentVersion = versions.find(v => v.isCurrent);
+  const articles = currentVersion ? DEMO_DATA.articles.filter(a => a.versionSeq == currentVersion.seq) : [];
+  const attachments = currentVersion ? DEMO_DATA.attachments.filter(a => a.versionSeq == currentVersion.seq) : [];
+  return { success: true, data: { ...law, currentVersion, articles, attachments, versions } };
+}
+
+function getDemoDepartments(category) {
+  const depts = DEMO_DATA.departments.filter(d => d.category === category);
+  return { success: true, data: depts.map(d => ({ ...d, children: [] })) };
+}
+
+function getDemoSearch(keyword) {
+  if (!keyword) return { success: true, data: [], total: 0 };
+  const kw = keyword.toLowerCase();
+  const results = [];
+  DEMO_DATA.laws.forEach(law => {
+    if (law.title.toLowerCase().includes(kw)) {
+      results.push({ type: 'title', lawSeq: law.seq, title: law.title, lawType: law.type, deptName: law.deptName, matchText: law.title });
+    }
+  });
+  return { success: true, data: results, total: results.length, keyword };
+}
+
+function getDemoLatestRevisions() {
+  const results = DEMO_DATA.versions.sort((a, b) => new Date(b.revisionDate) - new Date(a.revisionDate)).slice(0, 10).map(v => {
+    const law = DEMO_DATA.laws.find(l => l.seq == v.lawSeq);
+    return { lawSeq: law?.seq, title: law?.title, type: law?.type, deptName: law?.deptName, revisionType: v.revisionType, revisionDate: v.revisionDate, effectiveDate: v.effectiveDate };
+  });
+  return { success: true, data: results };
+}
+
+// ============================================
+// 부서 트리
+// ============================================
+async function loadDepartmentTree() {
+  const result = await apiGet('getDepartments', { category: state.currentCategory });
+  if (result.success) renderDepartmentTree(result.data);
+}
+
+function renderDepartmentTree(depts) {
+  document.getElementById('deptTree').innerHTML = depts.map(d => `
+    <div class="tree-node" data-code="${d.code}">
+      <div class="tree-item" onclick="selectDepartment('${d.code}', '${d.name}')">
+        <span class="tree-toggle"></span>
+        <i class="fas fa-folder tree-icon"></i>
+        <span class="tree-label">${d.name}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectDepartment(code, name) {
+  document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('selected'));
+  document.querySelector(`.tree-node[data-code="${code}"] .tree-item`).classList.add('selected');
+  state.currentDeptCode = code;
+  updateBreadcrumb(state.currentCategory + '정보', name);
+  loadLawList({ deptCode: code });
+  showListView();
+}
+
+function expandAllTree() { document.querySelectorAll('.tree-children').forEach(el => el.classList.add('expanded')); }
+function collapseAllTree() { document.querySelectorAll('.tree-children').forEach(el => el.classList.remove('expanded')); }
+function filterTree() {
+  const kw = document.getElementById('treeSearch').value.toLowerCase();
+  document.querySelectorAll('.tree-node').forEach(n => {
+    n.style.display = n.querySelector('.tree-label').textContent.toLowerCase().includes(kw) ? '' : 'none';
+  });
+}
+
+// ============================================
+// 카테고리 변경
+// ============================================
+function changeCategory(category) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelector(`.nav-item[data-category="${category}"]`).classList.add('active');
+  state.currentCategory = category;
+  state.currentDeptCode = null;
+  document.getElementById('currentCategoryTitle').textContent = category + '정보';
+  updateBreadcrumb(category + '정보');
+  loadDepartmentTree();
+  loadLawList({ type: category });
+  showListView();
+}
+
+// ============================================
+// 규정 목록
+// ============================================
+async function loadLawList(params = {}) {
+  if (!params.type && !params.deptCode) params.type = state.currentCategory;
+  const result = await apiGet('getLawList', params);
+  if (result.success) {
+    state.laws = result.data;
+    renderLawList(result.data);
+    document.getElementById('totalCount').textContent = result.total;
+  }
+}
+
+function renderLawList(laws) {
+  const container = document.getElementById('lawList');
+  if (laws.length === 0) {
+    container.innerHTML = '<li class="empty-state"><i class="fas fa-inbox"></i><p>등록된 규정이 없습니다.</p></li>';
+    return;
+  }
+  container.innerHTML = laws.map(law => {
+    const typeInfo = CONFIG.LAW_TYPES[law.type] || { label: law.type, class: '' };
+    return `
+      <li class="law-item" onclick="viewLawDetail(${law.seq})">
+        <div class="law-item-title">${law.title}</div>
+        <div class="law-item-meta">
+          <span class="law-item-badge ${typeInfo.class}">${typeInfo.label}</span>
+          <span><i class="fas fa-building"></i> ${law.deptName}</span>
+          <span><i class="fas fa-calendar"></i> ${law.updatedDate}</span>
+        </div>
+      </li>
+    `;
+  }).join('');
+}
+
+function sortLawList() {
+  const opt = document.getElementById('sortOption').value;
+  let sorted = [...state.laws];
+  if (opt === 'title') sorted.sort((a, b) => a.title.localeCompare(b.title, 'ko'));
+  else sorted.sort((a, b) => new Date(b.updatedDate) - new Date(a.updatedDate));
+  renderLawList(sorted);
+}
+
+// ============================================
+// 규정 상세
+// ============================================
+async function viewLawDetail(seq) {
+  state.currentLawSeq = seq;
+  const result = await apiGet('getLawDetail', { seq });
+  if (result.success) {
+    state.lawDetail = result.data;
+    renderLawDetail(result.data);
+    showDetailView();
+    updateBreadcrumb(state.currentCategory + '정보', result.data.deptName, result.data.title);
+  }
+}
+
+function renderLawDetail(data) {
+  document.getElementById('lawTitle').textContent = data.title;
+  document.getElementById('lawDeptName').textContent = data.deptName;
+  renderVersionSelect(data.versions);
+  const revCount = data.articles.filter(a => a.changeType).length;
+  document.getElementById('revisionBadge').style.display = revCount > 0 ? 'block' : 'none';
+  document.getElementById('revisionCount').textContent = revCount;
+  renderArticleTree(data.articles);
+  renderArticleContent(data.articles);
+  renderAttachments(data.attachments);
+}
+
+function renderVersionSelect(versions) {
+  document.getElementById('versionSelect').innerHTML = versions.map(v =>
+    `<option value="${v.seq}" ${v.isCurrent ? 'selected' : ''}>${v.revisionDate} ${v.revisionType}</option>`
+  ).join('');
+}
+
+function renderArticleTree(articles) {
+  let currentChapter = '';
+  document.getElementById('articleTree').innerHTML = articles.map((a, i) => {
+    let ch = '';
+    if (a.chapter && a.chapter !== currentChapter) { currentChapter = a.chapter; ch = `<div class="toc-item chapter">${a.chapter}</div>`; }
+    const badge = a.changeType ? `<span class="change-badge ${CONFIG.CHANGE_TYPES[a.changeType]?.class || ''}">${a.changeType}</span>` : '';
+    const title = a.articleTitle ? `${a.articleNo}(${a.articleTitle})` : a.articleNo;
+    return `${ch}<div class="toc-item ${i === state.currentArticleIndex ? 'active' : ''}" onclick="scrollToArticle(${i})" data-index="${i}">${title}${badge}</div>`;
+  }).join('');
+}
+
+function renderArticleContent(articles) {
+  let currentChapter = '';
+  document.getElementById('articleContent').innerHTML = articles.map((a, i) => {
+    let ch = '';
+    if (a.chapter && a.chapter !== currentChapter) { currentChapter = a.chapter; ch = `<h3 style="margin:20px 0 15px;color:var(--primary-color)">${a.chapter}</h3>`; }
+    const badge = a.changeType ? `<span class="badge ${CONFIG.CHANGE_TYPES[a.changeType]?.class || ''}">${a.changeType}</span>` : '';
+    const hl = a.changeType ? 'highlight' : '';
+    const title = a.articleTitle ? `${a.articleNo}(${a.articleTitle})` : a.articleNo;
+    return `${ch}<div class="article-section" id="article-${i}"><div class="article-title ${hl}">${title}${badge}</div><div class="article-body">${a.content.replace(/\n/g, '<br>')}</div></div>`;
+  }).join('');
+}
+
+function renderAttachments(atts) {
+  const container = document.getElementById('attachmentList');
+  if (!atts || atts.length === 0) { container.innerHTML = '<span style="font-size:12px;color:#999">첨부파일 없음</span>'; return; }
+  container.innerHTML = atts.map(a => `<a href="${a.fileUrl}" class="attachment-item" target="_blank"><i class="fas fa-file-download"></i>${a.fileName}</a>`).join('');
+}
+
+function scrollToArticle(index) {
+  state.currentArticleIndex = index;
+  document.querySelectorAll('.toc-item').forEach(i => i.classList.remove('active'));
+  const item = document.querySelector(`.toc-item[data-index="${index}"]`);
+  if (item) item.classList.add('active');
+  document.getElementById(`article-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function prevArticle() { if (state.currentArticleIndex > 0) scrollToArticle(state.currentArticleIndex - 1); }
+function nextArticle() { if (state.currentArticleIndex < (state.lawDetail?.articles?.length || 0) - 1) scrollToArticle(state.currentArticleIndex + 1); }
+function changeVersion() { /* 버전 변경 시 API 호출 필요 */ }
+
+// ============================================
+// 검색
+// ============================================
+async function doSearch() {
+  const keyword = document.getElementById('searchKeyword').value.trim();
+  const searchType = document.getElementById('searchType').value;
+  if (!keyword) { alert('검색어를 입력하세요.'); return; }
+  const result = await apiGet('search', { keyword, searchType });
+  if (result.success) {
+    document.getElementById('searchKeywordDisplay').textContent = keyword;
+    document.getElementById('searchResultCount').textContent = result.data.length;
+    const container = document.getElementById('searchResultList');
+    if (result.data.length === 0) {
+      container.innerHTML = '<li class="empty-state"><i class="fas fa-search"></i><p>검색 결과가 없습니다.</p></li>';
+    } else {
+      container.innerHTML = result.data.map(r => {
+        const typeInfo = CONFIG.LAW_TYPES[r.lawType] || { label: r.lawType, class: '' };
+        return `
+          <li class="law-item" onclick="viewLawDetail(${r.lawSeq})">
+            <div class="law-item-title">${r.title}</div>
+            <div class="law-item-meta">
+              <span class="law-item-badge ${typeInfo.class}">${typeInfo.label}</span>
+              <span><i class="fas fa-building"></i> ${r.deptName}</span>
+            </div>
+            <div class="match-text">${r.matchText.replace(new RegExp(`(${keyword})`, 'gi'), '<mark>$1</mark>')}</div>
+          </li>
+        `;
+      }).join('');
+    }
+    showSearchResultView();
+  }
+}
+
+// ============================================
+// 최신 제/개정
+// ============================================
+async function showLatestRevisions() {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelector('.nav-item[data-category="최신"]').classList.add('active');
+  const result = await apiGet('getLatestRevisions');
+  if (result.success) {
+    document.getElementById('latestRevisionList').innerHTML = result.data.map(r => {
+      const typeInfo = CONFIG.LAW_TYPES[r.type] || { label: r.type, class: '' };
+      return `
+        <li class="law-item" onclick="viewLawDetail(${r.lawSeq})">
+          <div class="law-item-title"><span class="law-item-badge" style="background:#fff3cd;color:#856404;margin-right:8px">${r.revisionType}</span>${r.title}</div>
+          <div class="law-item-meta">
+            <span class="law-item-badge ${typeInfo.class}">${typeInfo.label}</span>
+            <span><i class="fas fa-building"></i> ${r.deptName}</span>
+            <span><i class="fas fa-calendar"></i> ${r.revisionDate}</span>
+          </div>
+        </li>
+      `;
+    }).join('');
+    showLatestRevisionView();
+    updateBreadcrumb('최신 제/개정');
+  }
+}
+
+// ============================================
+// 뷰 전환
+// ============================================
+function showListView() {
+  document.getElementById('lawListView').style.display = 'block';
+  document.getElementById('lawDetailView').style.display = 'none';
+  document.getElementById('searchResultView').style.display = 'none';
+  document.getElementById('latestRevisionView').style.display = 'none';
+}
+
+function showDetailView() {
+  document.getElementById('lawListView').style.display = 'none';
+  document.getElementById('lawDetailView').style.display = 'block';
+  document.getElementById('searchResultView').style.display = 'none';
+  document.getElementById('latestRevisionView').style.display = 'none';
+}
+
+function showSearchResultView() {
+  document.getElementById('lawListView').style.display = 'none';
+  document.getElementById('lawDetailView').style.display = 'none';
+  document.getElementById('searchResultView').style.display = 'block';
+  document.getElementById('latestRevisionView').style.display = 'none';
+}
+
+function showLatestRevisionView() {
+  document.getElementById('lawListView').style.display = 'none';
+  document.getElementById('lawDetailView').style.display = 'none';
+  document.getElementById('searchResultView').style.display = 'none';
+  document.getElementById('latestRevisionView').style.display = 'block';
+}
+
+function toggleViewMode(mode) {
+  state.viewMode = mode;
+  document.getElementById('detailContent').classList.toggle('full-view', mode === 'full');
+}
+
+// ============================================
+// 액션 버튼
+// ============================================
+function downloadFullText() {
+  const att = state.lawDetail?.attachments?.find(a => a.fileType === '전문');
+  if (att) window.open(att.fileUrl, '_blank');
+  else alert('전문 파일이 없습니다.');
+}
+
+function showRevisionHistory() {
+  const versions = state.lawDetail?.versions || [];
+  openModal('개정 이력', `
+    <table class="revision-table">
+      <thead><tr><th>버전</th><th>구분</th><th>제정/개정일</th><th>시행일</th><th>현행</th></tr></thead>
+      <tbody>${versions.map(v => `<tr><td>${v.version}차</td><td>${v.revisionType}</td><td>${v.revisionDate}</td><td>${v.effectiveDate}</td><td>${v.isCurrent ? '✓' : ''}</td></tr>`).join('')}</tbody>
+    </table>
+  `);
+}
+
+function showKoreanIndex() {
+  const cons = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+  openModal('가나다 검색', `<div style="display:flex;flex-wrap:wrap;gap:8px">${cons.map(c => `<button class="btn btn-outline" onclick="closeModal();document.getElementById('searchKeyword').value='${c}';doSearch()">${c}</button>`).join('')}</div>`);
+}
+
+function showDateSearch() {
+  openModal('개정일 검색', `<div><label>시작일: <input type="date" id="startDate"></label></div><div style="margin:10px 0"><label>종료일: <input type="date" id="endDate"></label></div><button class="btn btn-search" onclick="alert('개정일 검색은 API 연동 후 사용 가능합니다.');closeModal()">검색</button>`);
+}
+
+// ============================================
+// 모달
+// ============================================
+function openModal(title, content) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = content;
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+// ============================================
+// 유틸리티
+// ============================================
+function updateBreadcrumb(...paths) {
+  document.getElementById('breadcrumb').innerHTML = '<a href="#" onclick="goHome()">HOME</a>' +
+    paths.map((p, i) => `<i class="fas fa-chevron-right"></i>${i === paths.length - 1 ? `<span>${p}</span>` : `<a href="#">${p}</a>`}`).join('');
+}
+
+function goHome() {
+  state.currentDeptCode = null;
+  updateBreadcrumb(state.currentCategory + '정보');
+  loadLawList();
+  showListView();
+}
+</script>
+</body>
+</html>
